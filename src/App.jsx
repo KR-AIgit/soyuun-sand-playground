@@ -219,7 +219,7 @@ function App() {
       }
     }
     if (id === TYPES.WIND) {
-      if (engine.windTimer > 0 || engine.windCooldown > 0) {
+      if (engine.windTimer > 0) {
         setToastMessage("💨 가을바람은 60초에 한 번 불어요! 💨");
         setTimeout(() => setToastMessage(null), 3000);
         return;
@@ -244,7 +244,7 @@ function App() {
         engine.moonCooldown = 3600;
       } else if (modalElement.id === TYPES.WIND) {
         engine.windTimer = 600; // 10 seconds of wind
-        engine.windCooldown = 3600;
+        engine.windCooldown = 0;
       } else {
         setCurrentElement(modalElement.id);
       }
