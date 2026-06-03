@@ -434,6 +434,48 @@ export class PhysicsEngine {
           }
         }
 
+        // Autumn Leaves
+        else if (id === TYPES.LEAF_AUTUMN) {
+           // 가을바람 연출: 낙엽이 왼쪽 화면 밖으로 흩날리며 서서히 소멸됨
+           let windMoved = false;
+           if (this.windTimer > 0) {
+              let targetIdx = idx;
+              
+              if (Math.random() < 0.8) { // 왼쪽으로 빠르게 이동
+                 const dx = -1;
+                 const dy = Math.random() < 0.5 ? -1 : 0;
+                 if (x === 0) {
+                    this.nextGrid[idx] = TYPES.EMPTY; // 화면 왼쪽 끝에 닿으면 즉시 소멸
+                    continue;
+                 } else if (this.canMoveTo(x + dx, y + dy)) {
+                    this.swap(x, y, x + dx, y + dy);
+                    targetIdx = this.getIndex(x + dx, y + dy);
+                    windMoved = true;
+                 }
+              }
+              if (Math.random() < 0.00115) { // 바람에 날려 소멸
+                 this.nextGrid[targetIdx] = TYPES.EMPTY;
+                 continue;
+              }
+              if (windMoved) continue;
+           }
+
+           if (this.canSwapLiquid(x, y + 1)) {
+             this.swap(x, y, x, y + 1);
+           } else {
+             // 바닥에 닿은 낙엽은 잎이 좌우로 흔들리듯 살짝 퍼짐
+             const dx = Math.random() < 0.5 ? -1 : 1;
+             if (this.canSwapLiquid(x + dx, y + 1)) {
+                this.swap(x, y, x + dx, y + 1);
+             } else {
+                const perm = this.findPermeableEmpty(x, y, 0, 1, 15);
+                if (perm) {
+                  this.swap(x, y, perm.x, perm.y);
+                }
+             }
+           }
+        }
+
         // Falling Solid (drops straight down only)
         else if (el.type === 'falling_solid') {
           if (this.canSwapLiquid(x, y + 1)) {
@@ -779,12 +821,12 @@ export class PhysicsEngine {
           }
         }
 
-        if (id === TYPES.PLANT || id === TYPES.TREE) {
+        if (id === TYPES.PLANT || id === TYPES.TREE || id === TYPES.FLOWER_PINK) {
            if (this.windTimer > 0 && Math.random() < 0.02) {
               if (this.canSwapLiquid(x, y+1) || Math.random() < 0.1) {
                  this.nextGrid[idx] = TYPES.LEAF_AUTUMN;
                  if (this.toastMessage === null && !this.autumnToastShown) {
-                    this.toastMessage = "가을이 오면 나뭇잎이 예쁘게 물들고, 겨울을 준비하기 위해 땅으로 떨어져요!";
+                    this.toastMessage = "가을바람이 불면 꽃과 잎이 예쁘게 물들고 땅으로 떨어져요!";
                     this.autumnToastShown = true;
                  }
               }
@@ -861,9 +903,9 @@ export class PhysicsEngine {
                      if (tx >= 0 && tx < this.width && ty >= 0 && ty < this.height) {
                         if (this.get(tx, ty) === TYPES.EMPTY) {
                            // 10% 꽃, 90% 잎
+                           // 10% 핑크 벚꽃, 90% 잎
                            if (Math.random() < 0.1) {
-                              const flowers = [TYPES.FLOWER_1, TYPES.FLOWER_2, TYPES.FLOWER_3];
-                              this.nextGrid[this.getIndex(tx, ty)] = flowers[Math.floor(Math.random() * flowers.length)];
+                              this.nextGrid[this.getIndex(tx, ty)] = TYPES.FLOWER_PINK;
                            } else {
                               this.nextGrid[this.getIndex(tx, ty)] = TYPES.TREE;
                            }
