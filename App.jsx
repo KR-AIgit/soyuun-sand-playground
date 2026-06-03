@@ -219,8 +219,8 @@ function App() {
       }
     }
     if (id === TYPES.WIND) {
-      if (engine.windTimer > 0 || engine.windCooldown > 0) {
-        setToastMessage("💨 가을바람은 60초에 한 번 불어요! 💨");
+      if (engine.windTimer > 0) {
+        setToastMessage("💨 지금 가을바람이 불고 있어요! 💨");
         setTimeout(() => setToastMessage(null), 3000);
         return;
       }
@@ -244,7 +244,7 @@ function App() {
         engine.moonCooldown = 3600;
       } else if (modalElement.id === TYPES.WIND) {
         engine.windTimer = 600; // 10 seconds of wind
-        engine.windCooldown = 3600;
+        engine.windCooldown = 0;
       } else {
         setCurrentElement(modalElement.id);
       }
@@ -260,7 +260,7 @@ function App() {
     <div className="app-container">
       {/* Top Bar */}
       <header className="header">
-        <h1>시아의 모래놀이터</h1>
+        <h1>🏖️ 시아의 모래놀이터</h1>
         <div className="controls">
           <button onClick={() => setIsPlaying(!isPlaying)} className="icon-btn">
             {isPlaying ? <Pause size={24} /> : <Play size={24} />}

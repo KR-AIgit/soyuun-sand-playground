@@ -457,23 +457,22 @@ export class PhysicsEngine {
                  this.nextGrid[targetIdx] = TYPES.EMPTY;
                  continue;
               }
+              if (windMoved) continue;
            }
-           
-           if (!windMoved) {
-              if (this.canSwapLiquid(x, y + 1)) {
-                this.swap(x, y, x, y + 1);
-              } else {
-                // 바닥에 닿은 낙엽은 잎이 좌우로 흔들리듯 살짝 퍼짐
-                const dx = Math.random() < 0.5 ? -1 : 1;
-                if (this.canSwapLiquid(x + dx, y + 1)) {
-                   this.swap(x, y, x + dx, y + 1);
-                } else {
-                   const perm = this.findPermeableEmpty(x, y, 0, 1, 15);
-                   if (perm) {
-                     this.swap(x, y, perm.x, perm.y);
-                   }
+
+           if (this.canSwapLiquid(x, y + 1)) {
+             this.swap(x, y, x, y + 1);
+           } else {
+             // 바닥에 닿은 낙엽은 잎이 좌우로 흔들리듯 살짝 퍼짐
+             const dx = Math.random() < 0.5 ? -1 : 1;
+             if (this.canSwapLiquid(x + dx, y + 1)) {
+                this.swap(x, y, x + dx, y + 1);
+             } else {
+                const perm = this.findPermeableEmpty(x, y, 0, 1, 15);
+                if (perm) {
+                  this.swap(x, y, perm.x, perm.y);
                 }
-              }
+             }
            }
         }
 
