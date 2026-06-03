@@ -260,7 +260,7 @@ function App() {
     <div className="app-container">
       {/* Top Bar */}
       <header className="header">
-        <h1>시아의 모래놀이터</h1>
+        <h1>🏖️ 시아의 모래놀이터</h1>
         <div className="controls">
           <button onClick={() => setIsPlaying(!isPlaying)} className="icon-btn">
             {isPlaying ? <Pause size={24} /> : <Play size={24} />}
