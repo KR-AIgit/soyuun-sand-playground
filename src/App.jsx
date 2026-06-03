@@ -220,7 +220,7 @@ function App() {
     }
     if (id === TYPES.WIND) {
       if (engine.windTimer > 0) {
-        setToastMessage("💨 가을바람은 60초에 한 번 불어요! 💨");
+        setToastMessage("💨 지금 가을바람이 불고 있어요! 💨");
         setTimeout(() => setToastMessage(null), 3000);
         return;
       }
